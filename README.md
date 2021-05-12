@@ -24,6 +24,9 @@ In browser:
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.validate.unobtrusive.min.js"></script>
+
+<link rel="stylesheet" href="node_modules/orgtreepopover/dist/style.min.css" />
+<script src="node_modules/orgtreepopover/dist/index.umd.js"></script>
 ```
 
 ## 用法

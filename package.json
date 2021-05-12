@@ -1,7 +1,7 @@
 {
     "name": "orgtreepopover",
     "version": "1.0.0",
-    "description": "",
+    "description": "```text\r dist/\r ├── index.umd.js (UMD)\r └──style.min.css (CSS, compressed)",
     "main": "index.js",
     "watch": {
         "run_watch": {
@@ -43,5 +43,13 @@
         "jquery-validation": "^1.19.3",
         "npm-watch": "^0.9.0",
         "rollup-plugin-alias": "^2.2.0"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/YUN-CHIEN-LO/orgTreePopover.git"
+    },
+    "bugs": {
+        "url": "https://github.com/YUN-CHIEN-LO/orgTreePopover/issues"
+    },
+    "homepage": "https://github.com/YUN-CHIEN-LO/orgTreePopover#readme"
 }
