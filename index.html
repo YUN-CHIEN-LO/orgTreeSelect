@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/gh/GedMarc/bootstrap4-dialog/dist/css/bootstrap-dialog.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="./dist/style.min.css" />
+    <title>orgTreePopover Test Page</title>
+</head>
+<style>
+    .row {
+        margin-bottom: 20px;
+    }
+    
+    .mySelect {
+        border: solid 2px #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    
+    .title {
+        margin: 0;
+        padding: 10px;
+        background-color: #efefef;
+        text-align: center;
+    }
+    
+    .tree {
+        padding: 10px;
+        border: solid 2px #ccc;
+    }
+    
+    .result {
+        max-height: 100px;
+        overflow-y: scroll;
+    }
+    
+    .col-sm-4>input,
+    .col-sm-4>button {
+        width: 100%;
+        margin: 5px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h3>OrgTreePopover 測試頁面</h3>
+
+        </div>
+        <div class="row ">
+            <div class="col-sm-4">
+                <p class="title">查詢對象</p>
+            </div>
+            <div class="col-sm-8">
+                <!-- 使用 orgTreePopover 套件 -->
+                <div id="tree" class="tree"></div>
+            </div>
+        </div>
+        <!-- 觸發 getNode Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getNodeBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳 node">get node by Id</button>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" name="" id="getNodeValue" value="1802_4342_0">
+            </div>
+            <div class="col-sm-4">
+                <p id="getNodeText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getParent Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getParentBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳 parent node">get Parent by Id</button>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" name="" id="getParentValue" value="1802_4342_0">
+            </div>
+            <div class="col-sm-4">
+                <p id="getParentText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getSiblings Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getSiblingsBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳所有Sibling node">get Siblings by Id</button>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" name="" id="getSiblingsValue" value="1802_4342_0">
+            </div>
+            <div class="col-sm-4">
+                <p id="getSiblingsText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getChilds Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getChildsBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳所有 child node">get Childs by Id</button>
+            </div>
+            <div class="col-sm-4">
+                <input type="text" name="" id="getChildsValue" value="1802_4342_0">
+            </div>
+            <div class="col-sm-4">
+                <p id="getChildsText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getSelectedTags Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getSelectTags" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳已選擇的tag，並過濾掉母子重複選擇的狀況">get select tags</button>
+            </div>
+            <div class="col-sm-8">
+                <!-- 已選取的tags，已陣列形式回傳 -->
+                <p id="getSelectedTagsText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getSelected Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getSelectedBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳所有已選擇的node">get All Selected by Id</button>
+            </div>
+            <div class="col-sm-8">
+                <p id="getSelectedText" class="result"></p>
+            </div>
+        </div>
+        <!-- 觸發 getUnselected Call back -->
+        <div class="row">
+            <div class="col-sm-4">
+                <button type="button" id="getUnselectedBtn" class="btn btn-info" data-toggle="tooltip" data-placement="bottom" title="回傳所有未選擇的node">get All  Unselected by Id</button>
+            </div>
+            <div class="col-sm-8">
+                <p id="getUnselectedText" class="result"></p>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js "></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/GedMarc/bootstrap4-dialog/dist/js/bootstrap-dialog.js"></script>
+<!-- <script src="./dist/bootstrap-treeview.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.validate.unobtrusive.min.js"></script>
+<script src="./dist/index.umd.js"></script>
+
+<script>
+    const _data = {
+        company_list: {
+            1802: {
+                sn: "1802",
+                title: "Hunter × Hunter",
+                dept_list: {
+                    0: {
+                        sn: 0,
+                        title: "全部",
+                        user_list: [{
+                            sn: 0,
+                            ud_sn: 0,
+                            title: "全部"
+                        }]
+                    },
+                    4342: {
+                        sn: "4342",
+                        title: "Sales",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            22922: {
+                                sn: "22922",
+                                ud_sn: "12344",
+                                title: "aaa"
+                            },
+                            22925: {
+                                sn: "22925",
+                                ud_sn: "12355",
+                                title: "bbb"
+                            },
+                            22930: {
+                                sn: "22930",
+                                ud_sn: "12349",
+                                title: "ccc"
+                            }
+                        }
+                    },
+                    4347: {
+                        sn: "4347",
+                        title: "MIS",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            22928: {
+                                sn: "22928",
+                                ud_sn: "12352",
+                                title: "_◯◯·◯◯客 _xxxo Zxxxxxk"
+                            },
+                            22929: {
+                                sn: "22929",
+                                ud_sn: "12351",
+                                title: "_◯◯·◯羅 _xxxxxa Mxxxu"
+                            },
+                            22931: {
+                                sn: "22931",
+                                ud_sn: "12350",
+                                title: "_◯◯◯·◯◯◯◯特 _xxxxxo Pxxxxxxxxxt"
+                            }
+                        }
+                    },
+                    4348: {
+                        sn: "4348",
+                        title: "Marketing",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            22924: {
+                                sn: "22924",
+                                ud_sn: "12356",
+                                title: "_◯◯◯·◯◯佳 _xxxxxxt Kxxxxxr"
+                            },
+                            22926: {
+                                sn: "22926",
+                                ud_sn: "12354",
+                                title: "_◯◯·◯◯客 _xxxxxa Zxxxxxk"
+                            },
+                            22927: {
+                                sn: "22927",
+                                ud_sn: "12353",
+                                title: "_◯◯◯·◯◯羅 _xxxxxc Nxxxxo"
+                            }
+                        }
+                    },
+                    4350: {
+                        sn: "4350",
+                        title: "總經理",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            22921: {
+                                sn: "22921",
+                                ud_sn: "12340",
+                                title: "_◯·◯◯士 _xxxg Fxxxxxs"
+                            }
+                        }
+                    },
+                    4765: {
+                        sn: "4765",
+                        title: "十二支 (Zodiacs)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24879: {
+                                sn: "24879",
+                                ud_sn: "20560",
+                                title: "金·◯◯士 Gxxg Fxxxxxs"
+                            },
+                            31535: {
+                                sn: "31535",
+                                ud_sn: "21850",
+                                title: "綺◯·◯◯夏 Cxxxxxe Yxxxxxxxe"
+                            },
+                            31536: {
+                                sn: "31536",
+                                ud_sn: "21851",
+                                title: "帕◯◯◯·◯爾 Pxxxxxxn Hxxl"
+                            },
+                            31537: {
+                                sn: "31537",
+                                ud_sn: "21852",
+                                title: "米◯◯◯◯◯·◯納 Mxxxxxxxm Nxxa"
+                            },
+                            31538: {
+                                sn: "31538",
+                                ud_sn: "21873",
+                                title: "關◯ Kxxxxi"
+                            },
+                            31539: {
+                                sn: "31539",
+                                ud_sn: "21874",
+                                title: "皮◯ Pxxn"
+                            },
+                            31540: {
+                                sn: "31540",
+                                ud_sn: "21853",
+                                title: "波◯◯·◯◯特 Bxxxxxi Gxxxxxe"
+                            },
+                            31541: {
+                                sn: "31541",
+                                ud_sn: "21875",
+                                title: "葛◯ Gxl"
+                            },
+                            31542: {
+                                sn: "31542",
+                                ud_sn: "21854",
+                                title: "薩◯·◯◯川 Sxxxxo Kxxxxxxxxa"
+                            },
+                            31543: {
+                                sn: "31543",
+                                ud_sn: "21876",
+                                title: "銀◯ Gxxxa"
+                            },
+                            31544: {
+                                sn: "31544",
+                                ud_sn: "21877",
+                                title: "西◯ Sxxxu"
+                            },
+                            31545: {
+                                sn: "31545",
+                                ud_sn: "21878",
+                                title: "鴣◯ Cxxxk"
+                            }
+                        }
+                    },
+                    4767: {
+                        sn: "4767",
+                        title: "獵人協會 (Hunter Association)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24878: {
+                                sn: "24878",
+                                ud_sn: "20559",
+                                title: "艾◯◯·◯◯羅 Axxxxc Nxxxxo"
+                            },
+                            49594: {
+                                sn: "49594",
+                                ud_sn: "42608",
+                                title: "凱◯ Kxxxo"
+                            },
+                            49595: {
+                                sn: "49595",
+                                ud_sn: "42615",
+                                title: "雷◯◯·◯◯◯◯特 Lxxxxo Pxxxxxxxxxt"
+                            },
+                            49596: {
+                                sn: "49596",
+                                ud_sn: "42614",
+                                title: "酷◯◯卡 Cxxxxxxxt"
+                            },
+                            49597: {
+                                sn: "49597",
+                                ud_sn: "42613",
+                                title: "小◯·◯◯士 Gxn Fxxxxxs"
+                            },
+                            49598: {
+                                sn: "49598",
+                                ud_sn: "42612",
+                                title: "西◯·◯羅 Hxxxxa Mxxxu"
+                            },
+                            49599: {
+                                sn: "49599",
+                                ud_sn: "42611",
+                                title: "半◯ Hxxxo"
+                            },
+                            49600: {
+                                sn: "49600",
+                                ud_sn: "42610",
+                                title: "雲◯ Wxxg"
+                            }
+                        }
+                    },
+                    4768: {
+                        sn: "4768",
+                        title: "揍敵客家族 (Zoldyck Family)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            31511: {
+                                sn: "31511",
+                                ud_sn: "21856",
+                                title: "馬◯·◯◯客 Mxxa Zxxxxxk"
+                            },
+                            31512: {
+                                sn: "31512",
+                                ud_sn: "21857",
+                                title: "傑◯·◯◯客 Zxxxg Zxxxxxk"
+                            },
+                            31513: {
+                                sn: "31513",
+                                ud_sn: "21865",
+                                title: "桀◯·◯◯客 Zxxo Zxxxxxk"
+                            },
+                            31514: {
+                                sn: "31514",
+                                ud_sn: "21866",
+                                title: "席◯·◯◯客 Sxxxa Zxxxxxk"
+                            },
+                            31515: {
+                                sn: "31515",
+                                ud_sn: "21867",
+                                title: "伊◯◯·◯◯客 Ixxxxi Zxxxxxk"
+                            },
+                            31516: {
+                                sn: "31516",
+                                ud_sn: "21868",
+                                title: "糜◯·◯◯客 Mxxxxxi Zxxxxxk"
+                            },
+                            31517: {
+                                sn: "31517",
+                                ud_sn: "21869",
+                                title: "奇◯·◯◯客 Kxxxxa Zxxxxxk"
+                            },
+                            31518: {
+                                sn: "31518",
+                                ud_sn: "21870",
+                                title: "阿◯◯·◯◯客 Axxxxa Zxxxxxk"
+                            },
+                            31519: {
+                                sn: "31519",
+                                ud_sn: "21871",
+                                title: "柯◯·◯◯客 Kxxxxxo Zxxxxxk"
+                            }
+                        }
+                    },
+                    4769: {
+                        sn: "4769",
+                        title: "卡金帝國 (Kakin)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            31520: {
+                                sn: "31520",
+                                ud_sn: "21879",
+                                title: "納◯◯·◯◯肉 Nxxxxi Hxx xxx xxu"
+                            },
+                            31521: {
+                                sn: "31521",
+                                ud_sn: "21880",
+                                title: "班◯◯·◯◯肉 Bxxxxxxn Hxx xxx xxu"
+                            },
+                            31522: {
+                                sn: "31522",
+                                ud_sn: "21881",
+                                title: "卡◯◯·◯◯肉 Cxxxxxa Hxx xxx xxu"
+                            },
+                            31523: {
+                                sn: "31523",
+                                ud_sn: "21882",
+                                title: "喬◯·◯◯肉 Zxxxx-xxi Hxx xxx xxu"
+                            },
+                            31524: {
+                                sn: "31524",
+                                ud_sn: "21883",
+                                title: "切◯◯◯◯·◯◯肉 Txxxxxxxxxxh Hxx xxx xxu"
+                            },
+                            31525: {
+                                sn: "31525",
+                                ud_sn: "21884",
+                                title: "茨◯◯·◯◯肉 Txxxxxa Hxx xxx xxu"
+                            },
+                            31526: {
+                                sn: "31526",
+                                ud_sn: "21885",
+                                title: "泰◯·◯◯肉 Txxxn Hxx xxx xxu"
+                            },
+                            31527: {
+                                sn: "31527",
+                                ud_sn: "21886",
+                                title: "魯◯◯◯·◯◯肉 Lxxxxxs Hxx xxx xxu"
+                            },
+                            31528: {
+                                sn: "31528",
+                                ud_sn: "21887",
+                                title: "薩◯◯◯·◯◯肉 Sxxx-xxxe Hxx xxx xxu"
+                            },
+                            31529: {
+                                sn: "31529",
+                                ud_sn: "21888",
+                                title: "哈◯◯◯◯◯·◯◯肉 Hxxxxxxxxg Hxx xxx xxu"
+                            },
+                            31530: {
+                                sn: "31530",
+                                ud_sn: "21889",
+                                title: "卡◯·◯◯肉 Kxxxxu Hxx xxx xxu"
+                            },
+                            31531: {
+                                sn: "31531",
+                                ud_sn: "21891",
+                                title: "蓋◯◯·◯◯肉 Kxxxo Hxx xxx xxu"
+                            },
+                            31532: {
+                                sn: "31532",
+                                ud_sn: "21892",
+                                title: "木◯◯·◯◯肉 Mxxxxe Hxx xxx xxu"
+                            },
+                            31533: {
+                                sn: "31533",
+                                ud_sn: "21893",
+                                title: "瑪◯◯·◯◯肉 Mxxxxxm Hxx xxx xxu"
+                            },
+                            31534: {
+                                sn: "31534",
+                                ud_sn: "21895",
+                                title: "瓦◯◯·◯◯肉 Wxxxe Hxx xxx xxu"
+                            }
+                        }
+                    },
+                    4771: {
+                        sn: "4771",
+                        title: "王直屬護衛隊 (Royal Guard)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24811: {
+                                sn: "24811",
+                                ud_sn: "20562",
+                                title: "尼◯◯多 Nxxxxxxxxu"
+                            },
+                            24812: {
+                                sn: "24812",
+                                ud_sn: "20563",
+                                title: "梟◯◯夫 Sxxxxxxxf"
+                            },
+                            24813: {
+                                sn: "24813",
+                                ud_sn: "20564",
+                                title: "孟◯◯◯匹 Mxxxxxxxxxxxxi"
+                            }
+                        }
+                    },
+                    4784: {
+                        sn: "4784",
+                        title: "王 (Chimera Ant King)",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24810: {
+                                sn: "24810",
+                                ud_sn: "20561",
+                                title: "梅◯◯姆 Mxxxxm"
+                            }
+                        }
+                    },
+                    5582: {
+                        sn: "5582",
+                        title: "幻影旅團 - 刑訊審問組",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24815: {
+                                sn: "24815",
+                                ud_sn: "20263",
+                                title: "飛◯·◯通 Fxxxxn Pxxxxr"
+                            },
+                            24871: {
+                                sn: "24871",
+                                ud_sn: "20268",
+                                title: "富◯◯◯·◯◯多 Fxxxxxxn Bxxxxxxx"
+                            },
+                            24877: {
+                                sn: "24877",
+                                ud_sn: "20274",
+                                title: "面◯ Oxxxxxe"
+                            }
+                        }
+                    },
+                    5583: {
+                        sn: "5583",
+                        title: "幻影旅團 - 情資處理組",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24870: {
+                                sn: "24870",
+                                ud_sn: "20267",
+                                title: "俠◯ Sxxxxxxk"
+                            },
+                            24876: {
+                                sn: "24876",
+                                ud_sn: "20273",
+                                title: "派◯◯妲 Pxxxxxxa"
+                            }
+                        }
+                    },
+                    5584: {
+                        sn: "5584",
+                        title: "幻影旅團 - 技術支援組",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24817: {
+                                sn: "24817",
+                                ud_sn: "20265",
+                                title: "瑪◯·◯◯◯娜 Mxxxi Kxxxxxxxe"
+                            },
+                            24872: {
+                                sn: "24872",
+                                ud_sn: "20269",
+                                title: "滴·紫 Sxxxxxu Mxxxxxxi"
+                            },
+                            24873: {
+                                sn: "24873",
+                                ud_sn: "20270",
+                                title: "庫◯ Kxxxxxi"
+                            }
+                        }
+                    },
+                    5585: {
+                        sn: "5585",
+                        title: "幻影旅團 - 特攻戰鬥組",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24816: {
+                                sn: "24816",
+                                ud_sn: "20264",
+                                title: "芬◯◯·◯◯◯布 Pxxxxs Mxxxxb"
+                            },
+                            24818: {
+                                sn: "24818",
+                                ud_sn: "20266",
+                                title: "信◯·◯◯馬 Nxxxxxxa Hxxxxa"
+                            },
+                            24874: {
+                                sn: "24874",
+                                ud_sn: "20271",
+                                title: "剝◯◯◯·◯◯戈 Bxxxxxxxv Nxxxxo"
+                            },
+                            24875: {
+                                sn: "24875",
+                                ud_sn: "20272",
+                                title: "窩◯ Uxxxxn"
+                            }
+                        }
+                    },
+                    5586: {
+                        sn: "5586",
+                        title: "幻影旅團 - 團長",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            24814: {
+                                sn: "24814",
+                                ud_sn: "20261",
+                                title: "庫◯◯·◯◯魯 Cxxxxxo Lxxxxxxr"
+                            }
+                        }
+                    },
+                    8066: {
+                        sn: "8066",
+                        title: "領路人一族",
+                        user_list: {
+                            0: {
+                                sn: 0,
+                                ud_sn: 0,
+                                title: "全部"
+                            },
+                            42772: {
+                                sn: "42772",
+                                ud_sn: "31501",
+                                title: "領◯人"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+    //#region 處理資料
+    /* == 處理資料 == 
+     * _data 中的資料要整理已以下物件為單位：
+     * {
+     *   id: {String}
+     *   text: {String},
+     *   nodes: {array}
+     * }
+     * 
+     * 現有的_data中，資料結構分三層： company-list、dept-list、user-list
+     */
+
+    /**
+     * 解構user-list
+     * 將 部門 底下的 user-list 拆解成正確的物件
+     * @param {Obj} dept
+     * @param {String} company id  
+     * @returns {Array} 回傳包有正確物件結構的陣列
+     */
+    function breakUser(obj, compId) {
+        let userList = [];
+        for (let user in obj.user_list) {
+            if (user != 0) {
+                userList.push({
+                    text: obj.user_list[user].title,
+                    // 產生 id
+                    id: compId + "_" + obj.sn + "_" + obj.user_list[user].sn
+                });
+            }
+        }
+        return userList;
+    }
+
+    /**
+     * 解構dept-list
+     * 將 公司 底下的 dept-list 拆解成正確的物件
+     * @param {Obj} company
+     * @returns {Array} 回傳包有正確物件結構的陣列
+     */
+    function breakDept(obj) {
+        let deptList = [];
+        for (let dept in obj.dept_list) {
+            if (dept != 0) {
+                deptList.push({
+                    text: obj.dept_list[dept].title,
+                    // 產生 id
+                    id: obj.sn + "_" + obj.dept_list[dept].sn + "_0",
+                    // 拆解此dept的user
+                    nodes: breakUser(obj.dept_list[dept], obj.sn)
+                });
+            }
+        }
+        return deptList;
+    }
+
+    /**
+     * 解構company-list
+     * 將 公司 拆解成正確的物件
+     * @param {Obj} _data
+     * @returns {Array} 回傳包有正確物件結構的陣列
+     */
+    function breakCompany(obj) {
+        let companyList = [];
+        for (let company in obj.company_list) {
+            let tmp = {
+                text: obj.company_list[company].title,
+                // 產生 id
+                id: obj.company_list[company].sn + "_0_0",
+                // 拆解此company的dept
+                nodes: breakDept(obj.company_list[company])
+            };
+            companyList.push(tmp);
+        }
+        return companyList;
+    }
+
+    /**
+     * get tree
+     * 處理data
+     * @param {Obj} _data
+     * @returns {Array} 回傳包有正確物件結構的陣列
+     */
+    const getTree = function(data) {
+        let t = breakCompany(data);
+        return t;
+    };
+
+    //#endregion
+
+    $(document).ready(function() {
+
+        // 初始化tooltip，解釋功能用
+        $('[data-toggle="tooltip"]').tooltip()
+
+
+
+        // 宣告 orgTreePopover
+        let myTree = new OrgTreePopover("#tree");
+
+        // set options
+        myTree.setOptions({
+
+            // set data
+            data: getTree(_data),
+            // set title
+            treeTitle: '部門列表',
+            // showCheckbox: true,
+            // onEdit methods
+            onEdit: (node) => {
+                myTree.openEditDialog({
+                    mode: 'edit',
+                    title: "Edit",
+                    node: node,
+                    onSave: function(dialog, formData) {
+                        node.text = formData.text;
+                        let isSuccess = myTree.updateNode(node);
+                        return isSuccess;
+                    },
+                });
+            },
+            // onAdd methods
+            onAdd: (node) => {
+                myTree.openEditDialog({
+                    mode: 'add',
+                    title: "Add",
+                    node: node,
+                    onSave: function(dialog, formData) {
+                        let newNode = {
+                            id: formData.nid,
+                            text: formData.text,
+                            nodes: []
+                        }
+                        let parent = myTree.getNode(node.id);
+                        let isSuccess = myTree.addNode(parent, newNode);
+                        console.log(isSuccess);
+                        return isSuccess;
+                    },
+                });
+            },
+            // onDelete methods
+            onDelete: (node) => {
+                myTree.openDeleteDialog({
+                    mode: 'delete',
+                    title: "Delete",
+                    node: node,
+                    onSave: function(node) {
+                        let isSuccess = myTree.deleteNode(node);
+                        return isSuccess;
+                    },
+                });
+            }
+        });
+
+        // === 測試methods ===
+
+
+        /**
+         * get node
+         * @param {String} id 
+         * @returns {Obj} node obj
+         */
+        $("#getNodeBtn").click(() => {
+            let id = $('#getNodeValue').val();
+            let node = myTree.getNode(id);
+            if (node == -1) $("#getNodeText").text("not found !");
+            else $("#getNodeText").text(node.text);
+        });
+
+        /**
+         * get Parent
+         * @param {String} id
+         * @return {Obj} node Obj
+         */
+        $("#getParentBtn").click(() => {
+            let id = $('#getParentValue').val();
+            let node = myTree.getParent(id);
+            if (node == -1) $("#getParentText").text("is root !");
+            else $("#getParentText").text(node.text);
+        });
+
+        /**
+         * get Siblings
+         * @param {String} id
+         * @return {Array} an array of node Obj
+         */
+        $("#getSiblingsBtn").click(() => {
+            let id = $('#getSiblingsValue').val();
+            let nodes = myTree.getSiblings(id);
+            let str = "";
+            nodes.forEach(item => {
+                str += `${item.text}, `;
+            });
+            if (str == "") $("#getSiblingsText").text("not found !");
+            else $("#getSiblingsText").text(str);
+        });
+
+        /**
+         * get Childs
+         * @param {String} id
+         * @return {Array} an array of node Obj
+         */
+        $("#getChildsBtn").click(() => {
+            let id = $('#getChildsValue').val();
+            let nodes = myTree.getChilds(id);
+            let str = "";
+            nodes.forEach(item => {
+                str += `${item.text}, `;
+            });
+            if (str == "") $("#getChildsText").text("not found !");
+            else $("#getChildsText").text(str);
+        });
+
+        /**
+         * get Selected Tags
+         * @param {String} id
+         * @return {Array} an array of node Obj
+         */
+        $("#getSelectTags").click(() => {
+
+            let nodes = myTree.getSelectedTags();
+            let str = "";
+            nodes.forEach(item => {
+                str += `${item.text}, `;
+            });
+            if (str == "") $("#getSelectedTagsText").text("not found !");
+            else $("#getSelectedTagsText").text(str);
+        });
+
+        /**
+         * get All Selected Nodes
+         * @param {String} id
+         * @return {Array} an array of node Obj
+         */
+        $("#getSelectedBtn").click(() => {
+            let nodes = myTree.getSelected();
+            let str = "";
+            nodes.forEach(item => {
+                str += `${item.text}, `;
+            });
+            if (str == "") $("#getSelectedText").text("not found !");
+            else $("#getSelectedText").text(str);
+        });
+
+        /**
+         * get All Unselected Nodes
+         * @param {String} id
+         * @return {Array} an array of node Obj
+         */
+        $("#getUnselectedBtn").click(() => {
+            let nodes = myTree.getUnselected();
+            let str = "";
+            nodes.forEach(item => {
+                str += `${item.text}, `;
+            });
+            if (str == "") $("#getUnselectedText").text("not found !");
+            else $("#getUnselectedText").text(str);
+        });
+
+    });
+</script>
