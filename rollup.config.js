@@ -13,7 +13,7 @@ module.exports = {
     output: [{
         file: `dist/${name}.umd.js`,
         format: 'umd',
-        name: 'OrgTreePopover',
+        name: 'OrgTreeSelect',
     }, ],
     plugins: [
         json(),

@@ -812,14 +812,22 @@
             // set data
             data: getTree(_data),
             // set title
-            treeTitle: '部門列表',
-            // showCheckbox: true,
+            texts: {
+                treeTitle: '部門列表',
+            },
             // onEdit methods
             onEdit: (node) => {
                 myTree.openEditDialog({
                     mode: 'edit',
-                    title: "Edit",
+                    title: "編輯",
                     node: node,
+                    texts: {
+                        id: "Id",
+                        text: "內容",
+                        save: "儲存",
+                        close: "取消",
+                        error_null: "請填寫此選項。"
+                    },
                     onSave: function(dialog, formData) {
                         node.text = formData.text;
                         let isSuccess = myTree.updateNode(node);
@@ -831,8 +839,16 @@
             onAdd: (node) => {
                 myTree.openEditDialog({
                     mode: 'add',
-                    title: "Add",
+                    title: "新增",
                     node: node,
+                    texts: {
+                        id: "Id",
+                        text: "內容",
+                        save: "儲存",
+                        close: "取消",
+                        error_invalid: "此Id已重複使用",
+                        error_null: "請填寫此選項。"
+                    },
                     onSave: function(dialog, formData) {
                         let newNode = {
                             id: formData.nid,
@@ -850,8 +866,14 @@
             onDelete: (node) => {
                 myTree.openDeleteDialog({
                     mode: 'delete',
-                    title: "Delete",
+                    title: "刪除",
                     node: node,
+                    texts: {
+                        id: "Id",
+                        text: "內容",
+                        close: "取消",
+                        delete: "刪除"
+                    },
                     onSave: function(node) {
                         let isSuccess = myTree.deleteNode(node);
                         return isSuccess;

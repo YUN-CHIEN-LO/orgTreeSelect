@@ -25,8 +25,6 @@ In browser:
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/mvc/3.0/jquery.validate.unobtrusive.min.js"></script>
 
-<link rel="stylesheet" href="node_modules/orgtreepopover/dist/style.min.css" />
-<script src="node_modules/orgtreepopover/dist/index.umd.js"></script>
 ```
 
 ## 用法
@@ -34,7 +32,7 @@ In browser:
 ### Syntax
 
 ```js
-let myTree = new OrgTreePopover(element, (options = {}));
+let myTree = new OrgTreeSelect(element, (options = {}));
 ```
 
 - **element**
@@ -52,8 +50,8 @@ let myTree = new OrgTreePopover(element, (options = {}));
 ```
 
 ```js
-// 宣告 orgTreePopover
-let myTree = new OrgTreePopover("#tree");
+// 宣告 orgTreeSelect
+let myTree = new OrgTreeSelect("#tree");
 // set options
 myTree.setOptions({
   data: _data,
@@ -210,6 +208,7 @@ Open Edit/Add Dialog
     onSave: {function}
   }
   ```
+
 ### openDeleteDialog(options = {})
 
 Open Delete Dialog
@@ -265,8 +264,13 @@ Delete Node
 ## 瀏覽器支援
 
 - ### Chrome (latest)
+
 - ### ~~Firefox (latest)~~
+
 - ### ~~Safari (latest)~~
+
 - ### ~~Opera (latest)~~
+
 - ### ~~Edge (latest)~~
+
 - ### ~~Internet Explorer 11~~

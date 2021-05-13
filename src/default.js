@@ -1,6 +1,8 @@
 export default {
     data: [],
-    treeTitle: "",
+    texts: {
+        treeTitle: "Title",
+    },
     showAdd: true,
     showEdit: true,
     showDelete: true,

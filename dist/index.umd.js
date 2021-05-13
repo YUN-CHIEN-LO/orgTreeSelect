@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.OrgTreePopover = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.OrgTreeSelect = factory());
 }(this, (function () { 'use strict';
 
     /**
@@ -53,7 +53,9 @@
 
     var DEFAULTS = {
       data: [],
-      treeTitle: "",
+      texts: {
+        treeTitle: "Title"
+      },
       showAdd: true,
       showEdit: true,
       showDelete: true,
@@ -281,14 +283,14 @@
 <div id="edit-form-dialog">
   <form name="nform-edit" id="nform-edit">
   <div class="form-group">
-      <label for="nid-edit">Id:</label>
-      <input type="text" class="form-control" id="nid-edit" name="nid-edit" required>
-      <label id="nid-edit-error" class="error" for="nid-edit"></label>
+      <label id="nid-edit-label" for="nid_edit">Id:</label>
+      <input type="text" class="form-control" id="nid-edit" name="nid_edit" required>
+      <label id="nid-edit-error" class="error" for="nid_edit"></label>
     </div>
     <div class="form-group">
-      <label for="text">Text:</label>
-      <input type="text" class="form-control" id="text-edit" name="text-edit" required>
-      <label id="text-edit-error" class="error" for="text-edit"></label>
+      <label id="text-edit-label" for="text_edit">Text:</label>
+      <input type="text" class="form-control" id="text-edit" name="text_edit" >
+      <label id="text-edit-error" class="error" for="text_edit"></label>
     </div>
   </form>
 </div>
@@ -297,14 +299,14 @@
 <div id="delete-form-dialog">
   <form name="nform-delete" id="nform-delete">
   <div class="form-group">
-      <label for="nid-delete">Id:</label>
-      <p id="nid-delete" name="nid-delete"></p>
-      <label id="nid-delete-error" class="error" for="nid-delete"></label>
+      <label id="nid-delete-label" for="nid_delete">Id:</label>
+      <p id="nid-delete" name="nid_delete"></p>
+      <label id="nid-delete-error" class="error" for="nid_delete"></label>
     </div>
     <div class="form-group">
-      <label for="text">Text:</label>
-      <p id="text-delete" name="text-delete"></p>
-      <label id="text-delete-error" class="error" for="text-delete"></label>
+      <label id="text-delete-label" for="text_delete">Text:</label>
+      <p id="text-delete" name="text_delete"></p>
+      <label id="text-delete-error" class="error" for="text_delete"></label>
     </div>
   </form>
 </div>
@@ -1839,6 +1841,14 @@
             text: '',
             nodes: []
           },
+          texts: {
+            id: 'id',
+            text: 'text',
+            save: "Save",
+            close: "Close",
+            error_invalid: "Please use an unique Id",
+            error_null: "Please enter a value"
+          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1847,15 +1857,14 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: 'Close123',
+            label: newOpt.texts.close,
             cssClass: 'btn-light',
             action: function (dialog) {
-              console.log("123123132");
               dialog.close();
             }
           }, {
             id: 'save',
-            label: 'Save',
+            label: newOpt.texts.save,
             cssClass: 'btn-primary',
             action: function (dialog) {
               console.log(jQuery.isFunction(newOpt.onSave));
@@ -1865,17 +1874,25 @@
                 let form = "form[name='nform-edit']";
                 $(form).validate({
                   rules: {
-                    nid: "required",
-                    text: "required"
+                    nid_edit: "required",
+                    text_edit: "required"
                   },
                   messages: {
-                    nid: "Please enter your node id",
-                    text: "Please enter your node text"
+                    nid_edit: newOpt.texts.error_null,
+                    text_edit: newOpt.texts.error_null
                   }
                 }); // set form submit actions
+                // $(form).submit((event) => {
 
-                $("#nform-edit").submit(event => {
-                  event.preventDefault(); // if form is valid
+                $(document).on("submit", form, function (event) {
+                  event.preventDefault();
+
+                  if (dialog.initSelector.$nid.val() == null) {
+                    $("#nid-edit-error").css('display', 'inline-block');
+                    $("#nid-edit-error").text("12313123");
+                    $("#nid-edit").focus();
+                  } // if form is valid
+
 
                   if ($(form).valid()) {
                     const formData = {
@@ -1892,7 +1909,7 @@
                       console.log("if fail, show error"); // if fail, show error
 
                       $("#nid-edit-error").css('display', 'inline-block');
-                      $("#nid-edit-error").text("Please use an unique Id");
+                      $("#nid-edit-error").text(newOpt.texts.error_invalid);
                       $("#nid-edit").focus();
                     }
                   }
@@ -1908,8 +1925,12 @@
             dialog.templateForm = tmpl(EDIT_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-edit'),
-              $text: dialog.templateForm.find('#text-edit')
+              $text: dialog.templateForm.find('#text-edit'),
+              $nid_label: dialog.templateForm.find('#nid-edit-label'),
+              $text_label: dialog.templateForm.find('#text-edit-label')
             };
+            dialog.initSelector.$nid_label.text(newOpt.texts.id);
+            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               // 新增
@@ -1948,6 +1969,12 @@
             text: '',
             nodes: []
           },
+          texts: {
+            id: 'id',
+            text: 'text',
+            close: "Close",
+            delete: "Delete"
+          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1956,14 +1983,14 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: 'Close',
+            label: newOpt.texts.close,
             cssClass: 'btn-light',
             action: function (dialog) {
               dialog.close();
             }
           }, {
             id: 'delete',
-            label: 'Delete',
+            label: newOpt.texts.delete,
             cssClass: 'btn-danger',
             action: function (dialog) {
               if ($.isFunction(newOpt.onSave)) {
@@ -1992,8 +2019,12 @@
             dialog.templateForm = tmpl(DELETE_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-delete'),
-              $text: dialog.templateForm.find('#text-delete')
+              $text: dialog.templateForm.find('#text-delete'),
+              $nid_label: dialog.templateForm.find('#nid-delete-label'),
+              $text_label: dialog.templateForm.find('#text-delete-label')
             };
+            dialog.initSelector.$nid_label.text(newOpt.texts.id);
+            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               case 'delete':
@@ -2059,9 +2090,7 @@
 
       init(options) {
         // 清空DOM元件
-        $(this.elem).empty(); // 指定Title
-
-        this.treeTitle = options.treeTitle; // 要嵌入的DOM
+        $(this.elem).empty(); // 要嵌入的DOM
 
         let tmpHtml = `
         <!-- select btn -->
@@ -2075,7 +2104,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close ${this.elem.substring(1)}ModalCancel"  data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">${this.options.treeTitle}</h4>
+                        <h4 class="modal-title">${this.options.texts.treeTitle}</h4>
                     </div>
                     <div class="modal-body">
                         <!-- tag box -->
