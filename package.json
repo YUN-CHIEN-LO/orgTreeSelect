@@ -1,5 +1,5 @@
 {
-    "name": "orgtreepopover",
+    "name": "orgtreeselect",
     "version": "1.0.0",
     "description": "```text\r dist/\r ├── index.umd.js (UMD)\r └──style.min.css (CSS, compressed)",
     "main": "index.js",
@@ -46,10 +46,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/YUN-CHIEN-LO/orgTreePopover.git"
+        "url": "git+https://github.com/YUN-CHIEN-LO/orgTreeSelect.git"
     },
     "bugs": {
-        "url": "https://github.com/YUN-CHIEN-LO/orgTreePopover/issues"
+        "url": "https://github.com/YUN-CHIEN-LO/orgTreeSelect/issues"
     },
-    "homepage": "https://github.com/YUN-CHIEN-LO/orgTreePopover#readme"
+    "homepage": "https://github.com/YUN-CHIEN-LO/orgTreeSelect#readme"
 }

@@ -1,2 +1,2 @@
-import OrgTreePopover from './orgTreePopover.js';
-export default OrgTreePopover;
+import OrgTreeSelect from './orgTreeSelect.js';
+export default OrgTreeSelect;
