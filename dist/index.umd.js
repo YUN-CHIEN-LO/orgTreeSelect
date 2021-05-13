@@ -1515,7 +1515,7 @@
       return result || this;
     };
 
-    class OrgTreePopover {
+    class OrgTreeSelect {
       /**
        * Constructor
        * @param {Sting} elem #tree 
@@ -1759,7 +1759,7 @@
         let _this = this; // 套用 plugin css styles
 
 
-        $(_this.elem).addClass("orgTreePopover"); // 點選tags
+        $(_this.elem).addClass("orgTreeSelect"); // 點選tags
 
         $(document).on('click', `.selectedItem`, function (event) {
           //get node id
@@ -2165,8 +2165,8 @@
 
     }
 
-    assign(OrgTreePopover.prototype, methods);
+    assign(OrgTreeSelect.prototype, methods);
 
-    return OrgTreePopover;
+    return OrgTreeSelect;
 
 })));
