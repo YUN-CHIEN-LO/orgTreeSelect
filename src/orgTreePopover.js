@@ -373,9 +373,10 @@ class OrgTreePopover {
             title: newOpt.title,
             buttons: [{
                     id: 'close',
-                    label: 'Close',
+                    label: 'Close123',
                     cssClass: 'btn-light',
                     action: function(dialog) {
+                        console.log("123123132");
                         dialog.close();
                     },
                 },
@@ -384,7 +385,9 @@ class OrgTreePopover {
                     label: 'Save',
                     cssClass: 'btn-primary',
                     action: function(dialog) {
-                        if ($.isFunction(newOpt.onSave)) {
+
+                        console.log(jQuery.isFunction(newOpt.onSave));
+                        if (jQuery.isFunction(newOpt.onSave)) {
 
                             // set form validation
                             let form = "form[name='nform-edit']";
@@ -400,7 +403,7 @@ class OrgTreePopover {
                             });
 
                             // set form submit actions
-                            $(form).submit((event) => {
+                            $("#nform-edit").submit((event) => {
                                 event.preventDefault();
 
                                 // if form is valid
@@ -549,6 +552,48 @@ class OrgTreePopover {
         }).setType(BootstrapDialog.TYPE_DEFAULT);
     }
 
+    checkDataValidation(data) {
+        data.forEach((node) => {
+            let idFlag = true;
+            let textFlag = true;
+            let otherFlag = false;
+            let otherKey = [];
+            Object.keys(node).forEach(key => {
+                if (key == 'id') {
+                    idFlag = false;
+                } else if (key == 'text') {
+                    textFlag = false;
+                } else if (key == 'nodes') {
+                    let tmpNodes = this.checkDataValidation(node.nodes);
+                    node.nodes = tmpNodes;
+                } else {
+                    otherFlag = true;
+                    if (!node["except"]) {
+                        node.except = [];
+                    }
+                    var innerObj = {};
+                    innerObj[key] = node[key];
+                    node.except.push(innerObj)
+                    otherKey.push(key);
+                    delete node[key];
+                }
+            });
+            if (idFlag) {
+                // console.log(`error: Missing key [id].`);
+                console.log(`error: Invalid Data Format`);
+            }
+            if (textFlag) {
+                // console.log(`error: Missing key [text].`);
+                console.log(`error: Invalid Data Format`);
+            }
+            if (otherFlag) {
+                // console.log(`error: Invalid key: [${otherKey}].`);
+                console.log(`error: Invalid Data Format`);
+            }
+        });
+        return data;
+    }
+
     /**
      * 初始化
      * @param {Obj} options 
@@ -598,11 +643,13 @@ class OrgTreePopover {
         // 內部指標
         let _this = this;
 
+        let _data = this.checkDataValidation(options.data);
+
         // 使用 bootstrap-treeview plugin
         this.t = new Tree(this.treeElem, {
 
             // 指定data
-            data: options.data,
+            data: _data,
             // 開啟重複選取
             multiSelect: true,
             // 開啟checkbox
