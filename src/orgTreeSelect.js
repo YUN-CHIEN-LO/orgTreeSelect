@@ -293,7 +293,7 @@ class OrgTreeSelect {
             } else {
 
                 // 若沒有tags要回傳，設回傳字串為default
-                $(`${_this.elem}ModalBtn > p`).text("請選擇");
+                $(`${_this.elem}ModalBtn > p`).text(_this.options.texts.selectText);
 
             }
         });
@@ -339,7 +339,7 @@ class OrgTreeSelect {
             } else {
 
                 // 若沒有tags要回傳，設回傳字串為default
-                $(`${_this.elem}ModalBtn > p`).text("請選擇");
+                $(`${_this.elem}ModalBtn > p`).text(_this.options.texts.selectText);
 
             }
         });
@@ -609,7 +609,7 @@ class OrgTreeSelect {
         let tmpHtml = `
         <!-- select btn -->
         <a  class="selectBtn" id="${this.elem.substring(1)}ModalBtn" data-toggle="modal" data-target="${this.elem}Modal">
-            <p>請選擇</p>
+            <p>${this.options.texts.selectText}</p>
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="0.8em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1280"><path d="M1011 480q0 13-10 23L535 969q-10 10-23 10t-23-10L23 503q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l393 393l393-393q10-10 23-10t23 10l50 50q10 10 10 23z" fill="#626262"/></svg>
         </a>
         <!-- modal -->
@@ -618,7 +618,7 @@ class OrgTreeSelect {
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close ${this.elem.substring(1)}ModalCancel"  data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">${this.options.treeTitle}</h4>
+                        <h4 class="modal-title">${this.options.texts.treeTitle}</h4>
                     </div>
                     <div class="modal-body">
                         <!-- tag box -->

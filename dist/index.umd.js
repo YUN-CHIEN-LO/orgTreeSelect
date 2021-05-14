@@ -54,7 +54,8 @@
     var DEFAULTS = {
       data: [],
       texts: {
-        treeTitle: "Title"
+        treeTitle: "Title",
+        selectText: "Please select an option"
       },
       showAdd: true,
       showEdit: true,
@@ -1786,7 +1787,7 @@
             $(`${_this.elem}ModalBtn > p`).text(str.slice(0, -2));
           } else {
             // 若沒有tags要回傳，設回傳字串為default
-            $(`${_this.elem}ModalBtn > p`).text("請選擇");
+            $(`${_this.elem}ModalBtn > p`).text(_this.options.texts.selectText);
           }
         }); // 關閉modal
 
@@ -1820,7 +1821,7 @@
             $(`${_this.elem}ModalBtn > p`).text(str.slice(0, -2));
           } else {
             // 若沒有tags要回傳，設回傳字串為default
-            $(`${_this.elem}ModalBtn > p`).text("請選擇");
+            $(`${_this.elem}ModalBtn > p`).text(_this.options.texts.selectText);
           }
         });
       }
@@ -1841,14 +1842,6 @@
             text: '',
             nodes: []
           },
-          texts: {
-            id: 'id',
-            text: 'text',
-            save: "Save",
-            close: "Close",
-            error_invalid: "Please use an unique Id",
-            error_null: "Please enter a value"
-          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1857,14 +1850,15 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: newOpt.texts.close,
+            label: 'Close123',
             cssClass: 'btn-light',
             action: function (dialog) {
+              console.log("123123132");
               dialog.close();
             }
           }, {
             id: 'save',
-            label: newOpt.texts.save,
+            label: 'Save',
             cssClass: 'btn-primary',
             action: function (dialog) {
               console.log(jQuery.isFunction(newOpt.onSave));
@@ -1874,25 +1868,17 @@
                 let form = "form[name='nform-edit']";
                 $(form).validate({
                   rules: {
-                    nid_edit: "required",
-                    text_edit: "required"
+                    nid: "required",
+                    text: "required"
                   },
                   messages: {
-                    nid_edit: newOpt.texts.error_null,
-                    text_edit: newOpt.texts.error_null
+                    nid: "Please enter your node id",
+                    text: "Please enter your node text"
                   }
                 }); // set form submit actions
-                // $(form).submit((event) => {
 
-                $(document).on("submit", form, function (event) {
-                  event.preventDefault();
-
-                  if (dialog.initSelector.$nid.val() == null) {
-                    $("#nid-edit-error").css('display', 'inline-block');
-                    $("#nid-edit-error").text("12313123");
-                    $("#nid-edit").focus();
-                  } // if form is valid
-
+                $("#nform-edit").submit(event => {
+                  event.preventDefault(); // if form is valid
 
                   if ($(form).valid()) {
                     const formData = {
@@ -1909,7 +1895,7 @@
                       console.log("if fail, show error"); // if fail, show error
 
                       $("#nid-edit-error").css('display', 'inline-block');
-                      $("#nid-edit-error").text(newOpt.texts.error_invalid);
+                      $("#nid-edit-error").text("Please use an unique Id");
                       $("#nid-edit").focus();
                     }
                   }
@@ -1925,12 +1911,8 @@
             dialog.templateForm = tmpl(EDIT_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-edit'),
-              $text: dialog.templateForm.find('#text-edit'),
-              $nid_label: dialog.templateForm.find('#nid-edit-label'),
-              $text_label: dialog.templateForm.find('#text-edit-label')
+              $text: dialog.templateForm.find('#text-edit')
             };
-            dialog.initSelector.$nid_label.text(newOpt.texts.id);
-            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               // 新增
@@ -1969,12 +1951,6 @@
             text: '',
             nodes: []
           },
-          texts: {
-            id: 'id',
-            text: 'text',
-            close: "Close",
-            delete: "Delete"
-          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1983,14 +1959,14 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: newOpt.texts.close,
+            label: 'Close',
             cssClass: 'btn-light',
             action: function (dialog) {
               dialog.close();
             }
           }, {
             id: 'delete',
-            label: newOpt.texts.delete,
+            label: 'Delete',
             cssClass: 'btn-danger',
             action: function (dialog) {
               if ($.isFunction(newOpt.onSave)) {
@@ -2019,12 +1995,8 @@
             dialog.templateForm = tmpl(DELETE_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-delete'),
-              $text: dialog.templateForm.find('#text-delete'),
-              $nid_label: dialog.templateForm.find('#nid-delete-label'),
-              $text_label: dialog.templateForm.find('#text-delete-label')
+              $text: dialog.templateForm.find('#text-delete')
             };
-            dialog.initSelector.$nid_label.text(newOpt.texts.id);
-            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               case 'delete':
@@ -2090,12 +2062,14 @@
 
       init(options) {
         // 清空DOM元件
-        $(this.elem).empty(); // 要嵌入的DOM
+        $(this.elem).empty(); // 指定Title
+
+        this.treeTitle = options.treeTitle; // 要嵌入的DOM
 
         let tmpHtml = `
         <!-- select btn -->
         <a  class="selectBtn" id="${this.elem.substring(1)}ModalBtn" data-toggle="modal" data-target="${this.elem}Modal">
-            <p>請選擇</p>
+            <p>${this.options.texts.selectText}</p>
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="0.8em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1024 1280"><path d="M1011 480q0 13-10 23L535 969q-10 10-23 10t-23-10L23 503q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l393 393l393-393q10-10 23-10t23 10l50 50q10 10 10 23z" fill="#626262"/></svg>
         </a>
         <!-- modal -->
