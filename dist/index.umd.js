@@ -2036,20 +2036,19 @@
               delete node[key];
             }
           });
+          console.log(data);
 
           if (idFlag) {
-            // console.log(`error: Missing key [id].`);
-            console.log(`error: Invalid Data Format`);
+            console.log(`error: Missing key [id].`); // console.log(`error: Invalid Data Format`);
           }
 
           if (textFlag) {
-            // console.log(`error: Missing key [text].`);
-            console.log(`error: Invalid Data Format`);
+            console.log(`error: Missing key [text].`); // console.log(`error: Invalid Data Format`);
           }
 
           if (otherFlag) {
             // console.log(`error: Invalid key: [${otherKey}].`);
-            console.log(`error: Invalid Data Format`);
+            console.log(`warning: Invalid Data Format`);
           }
         });
         return data;
@@ -2099,6 +2098,8 @@
         // 內部指標
 
         let _this = this;
+
+        console.log(options.data);
 
         let _data = this.checkDataValidation(options.data); // 使用 bootstrap-treeview plugin
 

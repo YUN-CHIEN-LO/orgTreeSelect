@@ -578,17 +578,18 @@ class OrgTreeSelect {
                     delete node[key];
                 }
             });
+            console.log(data);
             if (idFlag) {
-                // console.log(`error: Missing key [id].`);
-                console.log(`error: Invalid Data Format`);
+                console.log(`error: Missing key [id].`);
+                // console.log(`error: Invalid Data Format`);
             }
             if (textFlag) {
-                // console.log(`error: Missing key [text].`);
-                console.log(`error: Invalid Data Format`);
+                console.log(`error: Missing key [text].`);
+                // console.log(`error: Invalid Data Format`);
             }
             if (otherFlag) {
                 // console.log(`error: Invalid key: [${otherKey}].`);
-                console.log(`error: Invalid Data Format`);
+                console.log(`warning: Invalid Data Format`);
             }
         });
         return data;

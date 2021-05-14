@@ -730,11 +730,11 @@
         let userList = [];
         for (let user in obj.user_list) {
             if (user != 0) {
-                userList.push({
-                    text: obj.user_list[user].title,
-                    // 產生 id
-                    id: compId + "_" + obj.sn + "_" + obj.user_list[user].sn
-                });
+                let tmp = obj.user_list[user];
+                tmp.id = compId + "_" + obj.sn + "_" + obj.user_list[user].sn;
+                tmp.text = obj.user_list[user].title;
+                delete tmp["title"];
+                userList.push(tmp);
             }
         }
         return userList;
@@ -750,13 +750,13 @@
         let deptList = [];
         for (let dept in obj.dept_list) {
             if (dept != 0) {
-                deptList.push({
-                    text: obj.dept_list[dept].title,
-                    // 產生 id
-                    id: obj.sn + "_" + obj.dept_list[dept].sn + "_0",
-                    // 拆解此dept的user
-                    nodes: breakUser(obj.dept_list[dept], obj.sn)
-                });
+                let tmp = obj.dept_list[dept];
+                tmp.text = obj.dept_list[dept].title;
+                tmp.id = obj.sn + "_" + obj.dept_list[dept].sn + "_0";
+                tmp.nodes = breakUser(obj.dept_list[dept], obj.sn);
+                delete tmp["user_list"];
+                delete tmp["title"];
+                deptList.push(tmp);
             }
         }
         return deptList;
@@ -771,15 +771,17 @@
     function breakCompany(obj) {
         let companyList = [];
         for (let company in obj.company_list) {
-            let tmp = {
-                text: obj.company_list[company].title,
-                // 產生 id
-                id: obj.company_list[company].sn + "_0_0",
-                // 拆解此company的dept
-                nodes: breakDept(obj.company_list[company])
-            };
+            let tmp = obj.company_list[company];
+            tmp.text = obj.company_list[company].title;
+            // 產生 id
+            tmp.id = obj.company_list[company].sn + "_0_0";
+            // 拆解此company的dept
+            tmp.nodes = breakDept(obj.company_list[company]);
+            delete tmp["dept_list"];
+            delete tmp["title"];
             companyList.push(tmp);
-        }
+        };
+
         return companyList;
     }
 
