@@ -385,7 +385,7 @@ class OrgTreeSelect {
             title: newOpt.title,
             buttons: [{
                     id: 'close',
-                    label: 'Close123',
+                    label: 'Close',
                     cssClass: 'btn-light',
                     action: function(dialog) {
                         dialog.close();
