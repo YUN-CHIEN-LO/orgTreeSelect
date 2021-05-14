@@ -4,9 +4,9 @@ export default {
         treeTitle: "Title",
         selectText: "Please select an option"
     },
-    showAdd: true,
-    showEdit: true,
-    showDelete: true,
+    showAdd: false,
+    showEdit: false,
+    showDelete: false,
     showCheckbox: true,
     onAdd: null,
     onEdit: null,

@@ -10,6 +10,76 @@ export default {
         this.init(this.options);
     },
 
+    select(id) {
+        try {
+            let root = this.t.getNode(0);
+            let node = this.findNode(root, id);
+            this.selectThisNode(node);
+
+            this.pushSelected();
+
+            // 更新return item list
+            this.returnItem = this.selectItem;
+
+
+            if (this.returnItem.length > 0) {
+
+                // 宣告回傳字串
+                let str = "";
+                this.returnItem.forEach((item) => {
+                    str += `${item.text}, `;
+                });
+
+                // 更新回傳字串(移除string後面的', ')
+                $(`${this.elem}ModalBtn > p`).text(str.slice(0, -2));
+
+            } else {
+
+                // 若沒有tags要回傳，設回傳字串為default
+                $(`${this.elem}ModalBtn > p`).text(this.options.texts.selectText);
+
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    unselect(id) {
+        try {
+            let root = this.t.getNode(0);
+            let node = this.findNode(root, id);
+            this.unSelectThisNode(node);
+
+            this.pushSelected();
+
+            // 更新return item list
+            this.returnItem = this.selectItem;
+
+
+            if (this.returnItem.length > 0) {
+
+                // 宣告回傳字串
+                let str = "";
+                this.returnItem.forEach((item) => {
+                    str += `${item.text}, `;
+                });
+
+                // 更新回傳字串(移除string後面的', ')
+                $(`${this.elem}ModalBtn > p`).text(str.slice(0, -2));
+
+            } else {
+
+                // 若沒有tags要回傳，設回傳字串為default
+                $(`${this.elem}ModalBtn > p`).text(this.options.texts.selectText);
+
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
+
+
     /**
      * get node
      * @param {String} id 

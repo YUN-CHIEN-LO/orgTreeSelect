@@ -310,6 +310,8 @@ class OrgTreeSelect {
             }
         });
 
+
+
         // 關閉modal
         $(document).on('click', `.${_this.elem.substring(1)}ModalCancel`, function() {
 
