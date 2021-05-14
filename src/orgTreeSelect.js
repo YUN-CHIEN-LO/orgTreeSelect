@@ -250,13 +250,25 @@ class OrgTreeSelect {
         return null;
     };
 
+    addScript(src) {
+        var s = document.createElement('script');
+        s.setAttribute('src', src);
+        document.body.appendChild(s);
+    };
+
     /**
      * bind events
      */
     bindEvent() {
 
+
         // 內部指標
         let _this = this;
+
+        // include cdn
+        _this.options.cdnUrl.forEach((x) => {
+            _this.addScript(x);
+        });
 
         // 套用 plugin css styles
         $(_this.elem).addClass("orgTreeSelect");
@@ -376,7 +388,6 @@ class OrgTreeSelect {
                     label: 'Close123',
                     cssClass: 'btn-light',
                     action: function(dialog) {
-                        console.log("123123132");
                         dialog.close();
                     },
                 },
@@ -578,7 +589,6 @@ class OrgTreeSelect {
                     delete node[key];
                 }
             });
-            console.log(data);
             if (idFlag) {
                 console.log(`error: Missing key [id].`);
                 // console.log(`error: Invalid Data Format`);

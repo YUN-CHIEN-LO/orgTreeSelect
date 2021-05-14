@@ -63,7 +63,8 @@
       showCheckbox: true,
       onAdd: null,
       onEdit: null,
-      onDelete: null
+      onDelete: null,
+      cdnUrl: ["https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"]
     };
 
     var methods = {
@@ -1754,12 +1755,23 @@
         return null;
       }
 
+      addScript(src) {
+        var s = document.createElement('script');
+        s.setAttribute('src', src);
+        document.body.appendChild(s);
+      }
+
       /**
        * bind events
        */
       bindEvent() {
         // 內部指標
-        let _this = this; // 套用 plugin css styles
+        let _this = this; // include cdn
+
+
+        _this.options.cdnUrl.forEach(x => {
+          _this.addScript(x);
+        }); // 套用 plugin css styles
 
 
         $(_this.elem).addClass("orgTreeSelect"); // 點選tags
@@ -1853,7 +1865,6 @@
             label: 'Close123',
             cssClass: 'btn-light',
             action: function (dialog) {
-              console.log("123123132");
               dialog.close();
             }
           }, {
@@ -2036,7 +2047,6 @@
               delete node[key];
             }
           });
-          console.log(data);
 
           if (idFlag) {
             console.log(`error: Missing key [id].`); // console.log(`error: Invalid Data Format`);
@@ -2098,8 +2108,6 @@
         // 內部指標
 
         let _this = this;
-
-        console.log(options.data);
 
         let _data = this.checkDataValidation(options.data); // 使用 bootstrap-treeview plugin
 
