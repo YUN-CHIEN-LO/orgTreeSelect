@@ -22,6 +22,8 @@ In browser:
 ```html
 <script src="https://code.jquery.com/jquery-1.11.2.min.js "></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 ```
 
 ## 用法
@@ -138,9 +140,11 @@ myTree.setOptions({
 - Type: `Array`, an Array of node objects
 - Default: `[]`
 - note: node object:
+
   ```
   {id: str, text: str, nodes: [] }
   ```
+
   至少要有id和text兩個key，子物件要放在nodes裡面。
   如果傳入的data有這三項key以外的key，在建構tree時會一律放在 `except`的key下面。
 
@@ -197,12 +201,6 @@ myTree.setOptions({
 - Type: `Function`
 - Default: `null`
 - note: 刪除 node
-
-### cdnUrl
-
-- Type: `Array`
-- Default: `["https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"]`
-- note: 使用此plugin要額外使用的cdn url(預設帶入 jquery-validation 和 jquery-validation-unobtrusive)，不必要不需要更動
 
 # Methods
 

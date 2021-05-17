@@ -1,6 +1,6 @@
 {
     "name": "orgtreeselect",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "```text\r dist/\r ├── index.umd.js (UMD)\r └──style.min.css (CSS, compressed)",
     "main": "index.js",
     "watch": {

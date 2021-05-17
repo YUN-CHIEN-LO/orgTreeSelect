@@ -250,11 +250,14 @@ class OrgTreeSelect {
         return null;
     };
 
-    addScript(src) {
-        var s = document.createElement('script');
-        s.setAttribute('src', src);
-        document.body.appendChild(s);
-    };
+    /**
+     * add cdn script
+     */
+    // addScript(src) {
+    //     var s = document.createElement('script');
+    //     s.setAttribute('src', src);
+    //     document.body.appendChild(s);
+    // };
 
     /**
      * bind events
@@ -266,9 +269,9 @@ class OrgTreeSelect {
         let _this = this;
 
         // include cdn
-        _this.options.cdnUrl.forEach((x) => {
-            _this.addScript(x);
-        });
+        // _this.options.cdnUrl.forEach((x) => {
+        //     _this.addScript(x);
+        // });
 
         // 套用 plugin css styles
         $(_this.elem).addClass("orgTreeSelect");
