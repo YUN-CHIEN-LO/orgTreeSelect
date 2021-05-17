@@ -1,26 +1,15 @@
 {
     "name": "orgtreeselect",
-    "version": "1.0.1",
-    "description": "```text\r dist/\r ├── index.umd.js (UMD)\r └──style.min.css (CSS, compressed)",
-    "main": "index.js",
-    "watch": {
-        "run_watch": {
-            "patterns": [
-                "src"
-            ],
-            "extensions": "js",
-            "quiet": true
-        }
-    },
+    "version": "1.0.2",
+    "description": "This is a tree select plugin.",
+    "main": "dist/index.umd.js",
     "scripts": {
         "setup": "npm install & touch rollup.config.js & touch app.js & touch index.html & mkdir src & touch src/style.scss",
         "build": "rollup -c rollup.config.js",
         "serve": "node app.js",
         "start": "npm run serve & open http://localhost:3000/public",
         "stop": "npx kill-port 3000",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "watch": "npm-watch run_watch",
-        "run_watch": "npm run build"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Chien Lo",
     "license": "MIT",
@@ -41,7 +30,6 @@
         "body-parser": "^1.19.0",
         "express": "^4.17.1",
         "jquery-validation": "^1.19.3",
-        "npm-watch": "^0.9.0",
         "rollup-plugin-alias": "^2.2.0"
     },
     "repository": {
