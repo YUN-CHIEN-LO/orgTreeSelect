@@ -378,90 +378,89 @@ class OrgTreeSelect {
                 text: '',
                 nodes: []
             },
+            texts: {
+                id: "Id",
+                text: "Text",
+                save: "Save",
+                close: "Close",
+                error_invalid: "Please use an unique Id.",
+                error_null: "Please fill in."
+            },
             // 儲存按鈕的callback
-            onSave: null,
+            onSave: null
         };
-
         const newOpt = assign({}, DIALOGDEFAULT, $.isPlainObject(options) && options);
-
-
-
         BootstrapDialog.show({
             title: newOpt.title,
             buttons: [{
-                    id: 'close',
-                    label: 'Close',
-                    cssClass: 'btn-light',
-                    action: function(dialog) {
-                        dialog.close();
-                    },
-                },
-                {
-                    id: 'save',
-                    label: 'Save',
-                    cssClass: 'btn-primary',
-                    action: function(dialog) {
+                id: 'close',
+                label: newOpt.texts.close,
+                cssClass: 'btn-light',
+                action: function(dialog) {
+                    dialog.close();
+                }
+            }, {
+                id: 'save',
+                label: newOpt.texts.save,
+                cssClass: 'btn-primary',
+                action: function(dialog) {
+                    console.log(jQuery.isFunction(newOpt.onSave));
 
-                        console.log(jQuery.isFunction(newOpt.onSave));
-                        if (jQuery.isFunction(newOpt.onSave)) {
+                    if (jQuery.isFunction(newOpt.onSave)) {
+                        // set form validation
+                        let form = "form[name='nform-edit']";
+                        $(form).validate({
+                            rules: {
+                                nid_edit: "required",
+                                text_edit: "required"
+                            },
+                            messages: {
+                                nid_edit: newOpt.texts.error_null,
+                                text_edit: newOpt.texts.error_null
+                            }
+                        }); // set form submit actions
 
-                            // set form validation
-                            let form = "form[name='nform-edit']";
-                            $(form).validate({
-                                rules: {
-                                    nid: "required",
-                                    text: "required",
-                                },
-                                messages: {
-                                    nid: "Please enter your node id",
-                                    text: "Please enter your node text",
-                                },
-                            });
+                        $("#nform-edit").submit(event => {
+                            event.preventDefault(); // if form is valid
 
-                            // set form submit actions
-                            $("#nform-edit").submit((event) => {
-                                event.preventDefault();
+                            if ($(form).valid()) {
+                                const formData = {
+                                    nid: dialog.initSelector.$nid.val(),
+                                    text: dialog.initSelector.$text.val()
+                                }; // onSave callback
 
-                                // if form is valid
-                                if ($(form).valid()) {
-                                    const formData = {
-                                        nid: dialog.initSelector.$nid.val(),
-                                        text: dialog.initSelector.$text.val(),
-                                    };
+                                let success = newOpt.onSave(dialog, formData);
 
-                                    // onSave callback
-                                    let success = newOpt.onSave(dialog, formData);
-                                    if (success) {
-                                        // if success, close dialog
-                                        dialog.close();
-                                    } else {
-                                        console.log("if fail, show error");
-                                        // if fail, show error
-                                        $("#nid-edit-error").css('display', 'inline-block');
-                                        $("#nid-edit-error").text("Please use an unique Id");
-                                        $("#nid-edit").focus();
-                                    }
+                                if (success) {
+                                    // if success, close dialog
+                                    dialog.close();
+                                } else {
+                                    console.log("if fail, show error"); // if fail, show error
+
+                                    $("#nid-edit-error").css('display', 'inline-block');
+                                    $("#nid-edit-error").text(newOpt.texts.error_invalid);
+                                    $("#nid-edit").focus();
                                 }
+                            }
+                        }); // submit
 
-                            });
-
-                            // submit
-                            $(form).submit();
-
-                        }
-                    },
-                },
-            ],
+                        $(form).submit();
+                    }
+                }
+            }],
             onshow: function(dialog) {
-                const modalBody = dialog.getModalBody();
+                const modalBody = dialog.getModalBody(); // use edit template
 
-                // use edit template
                 dialog.templateForm = tmpl(EDIT_DIALOGTMP);
-
                 dialog.initSelector = {
                     $nid: dialog.templateForm.find('#nid-edit'),
                     $text: dialog.templateForm.find('#text-edit'),
+                    $nid_label: dialog.templateForm.find('#nid-edit-label'),
+                    $text_label: dialog.templateForm.find('#text-edit-label')
                 };
+
+                dialog.initSelector.$nid_label.text(newOpt.texts.id);
+                dialog.initSelector.$text_label.text(newOpt.texts.text);
 
                 switch (newOpt.mode) {
                     // 新增
@@ -471,6 +470,7 @@ class OrgTreeSelect {
                         dialog.initSelector.$text.val('');
                         break;
                         // 修改
+
                     case 'edit':
                         dialog.initSelector.$nid.prop('disabled', true);
                         dialog.initSelector.$nid.val(newOpt.node.id);
@@ -479,9 +479,9 @@ class OrgTreeSelect {
                 }
 
                 modalBody.append(dialog.templateForm);
-            },
-        }).setType(BootstrapDialog.TYPE_DEFAULT);
-    };
+            }
+        });
+    }
 
     /**
      * Show Delete Dialog
@@ -499,62 +499,63 @@ class OrgTreeSelect {
                 text: '',
                 nodes: []
             },
+            texts: {
+                id: "Id",
+                text: "內容",
+                close: "取消",
+                delete: "刪除"
+            },
             // 儲存按鈕的callback
-            onSave: null,
+            onSave: null
         };
-
         const newOpt = assign({}, DIALOGDEFAULT, $.isPlainObject(options) && options);
-
         BootstrapDialog.show({
             title: newOpt.title,
             buttons: [{
-                    id: 'close',
-                    label: 'Close',
-                    cssClass: 'btn-light',
-                    action: function(dialog) {
-                        dialog.close();
-                    },
-                },
-                {
-                    id: 'delete',
-                    label: 'Delete',
-                    cssClass: 'btn-danger',
-                    action: function(dialog) {
-                        if ($.isFunction(newOpt.onSave)) {
+                id: 'close',
+                label: newOpt.texts.close,
+                cssClass: 'btn-light',
+                action: function(dialog) {
+                    dialog.close();
+                }
+            }, {
+                id: 'delete',
+                label: newOpt.texts.delete,
+                cssClass: 'btn-danger',
+                action: function(dialog) {
+                    if ($.isFunction(newOpt.onSave)) {
+                        // set form submit actions
+                        let form = "form[name='nform-delete']";
+                        $(form).submit(event => {
+                            event.preventDefault(); // onSave callBack
 
-                            // set form submit actions
-                            let form = "form[name='nform-delete']";
-                            $(form).submit((event) => {
-                                event.preventDefault();
+                            let success = newOpt.onSave(options.node);
 
-                                // onSave callBack
-                                let success = newOpt.onSave(options.node);
-                                if (success) {
-                                    // if success, close dialog
-                                    dialog.close();
-                                } else {
-                                    console.log("error")
-                                }
-                            });
+                            if (success) {
+                                // if success, close dialog
+                                dialog.close();
+                            } else {
+                                console.log("error");
+                            }
+                        }); // submit
 
-                            // submit
-                            $(form).submit();
-
-                        }
-
-                    },
-                },
-            ],
+                        $(form).submit();
+                    }
+                }
+            }],
             onshow: function(dialog) {
-                const modalBody = dialog.getModalBody();
+                const modalBody = dialog.getModalBody(); // use delete template
 
-                // use delete template
                 dialog.templateForm = tmpl(DELETE_DIALOGTMP);
-
                 dialog.initSelector = {
                     $nid: dialog.templateForm.find('#nid-delete'),
                     $text: dialog.templateForm.find('#text-delete'),
+                    $nid_label: dialog.templateForm.find('#nid-delete-label'),
+                    $text_label: dialog.templateForm.find('#text-delete-label')
                 };
+
+                dialog.initSelector.$nid_label.text(newOpt.texts.id);
+                dialog.initSelector.$text_label.text(newOpt.texts.text);
 
                 switch (newOpt.mode) {
                     case 'delete':
@@ -564,8 +565,8 @@ class OrgTreeSelect {
                 }
 
                 modalBody.append(dialog.templateForm);
-            },
-        }).setType(BootstrapDialog.TYPE_DEFAULT);
+            }
+        });
     }
 
     checkDataValidation(data) {

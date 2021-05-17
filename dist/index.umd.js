@@ -1908,6 +1908,14 @@
             text: '',
             nodes: []
           },
+          texts: {
+            id: "Id",
+            text: "Text",
+            save: "Save",
+            close: "Close",
+            error_invalid: "Please use an unique Id.",
+            error_null: "Please fill in."
+          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1916,14 +1924,14 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: 'Close',
+            label: newOpt.texts.close,
             cssClass: 'btn-light',
             action: function (dialog) {
               dialog.close();
             }
           }, {
             id: 'save',
-            label: 'Save',
+            label: newOpt.texts.save,
             cssClass: 'btn-primary',
             action: function (dialog) {
               console.log(jQuery.isFunction(newOpt.onSave));
@@ -1933,12 +1941,12 @@
                 let form = "form[name='nform-edit']";
                 $(form).validate({
                   rules: {
-                    nid: "required",
-                    text: "required"
+                    nid_edit: "required",
+                    text_edit: "required"
                   },
                   messages: {
-                    nid: "Please enter your node id",
-                    text: "Please enter your node text"
+                    nid_edit: newOpt.texts.error_null,
+                    text_edit: newOpt.texts.error_null
                   }
                 }); // set form submit actions
 
@@ -1960,7 +1968,7 @@
                       console.log("if fail, show error"); // if fail, show error
 
                       $("#nid-edit-error").css('display', 'inline-block');
-                      $("#nid-edit-error").text("Please use an unique Id");
+                      $("#nid-edit-error").text(newOpt.texts.error_invalid);
                       $("#nid-edit").focus();
                     }
                   }
@@ -1976,8 +1984,12 @@
             dialog.templateForm = tmpl(EDIT_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-edit'),
-              $text: dialog.templateForm.find('#text-edit')
+              $text: dialog.templateForm.find('#text-edit'),
+              $nid_label: dialog.templateForm.find('#nid-edit-label'),
+              $text_label: dialog.templateForm.find('#text-edit-label')
             };
+            dialog.initSelector.$nid_label.text(newOpt.texts.id);
+            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               // 新增
@@ -1997,13 +2009,14 @@
 
             modalBody.append(dialog.templateForm);
           }
-        }).setType(BootstrapDialog.TYPE_DEFAULT);
+        });
       }
-
       /**
        * Show Delete Dialog
        * @param {Object} options 
        */
+
+
       showDeleteDialog(options = {}) {
         const DIALOGDEFAULT = {
           // 操作模式: add|edit
@@ -2016,6 +2029,12 @@
             text: '',
             nodes: []
           },
+          texts: {
+            id: "Id",
+            text: "內容",
+            close: "取消",
+            delete: "刪除"
+          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -2024,14 +2043,14 @@
           title: newOpt.title,
           buttons: [{
             id: 'close',
-            label: 'Close',
+            label: newOpt.texts.close,
             cssClass: 'btn-light',
             action: function (dialog) {
               dialog.close();
             }
           }, {
             id: 'delete',
-            label: 'Delete',
+            label: newOpt.texts.delete,
             cssClass: 'btn-danger',
             action: function (dialog) {
               if ($.isFunction(newOpt.onSave)) {
@@ -2060,8 +2079,12 @@
             dialog.templateForm = tmpl(DELETE_DIALOGTMP);
             dialog.initSelector = {
               $nid: dialog.templateForm.find('#nid-delete'),
-              $text: dialog.templateForm.find('#text-delete')
+              $text: dialog.templateForm.find('#text-delete'),
+              $nid_label: dialog.templateForm.find('#nid-delete-label'),
+              $text_label: dialog.templateForm.find('#text-delete-label')
             };
+            dialog.initSelector.$nid_label.text(newOpt.texts.id);
+            dialog.initSelector.$text_label.text(newOpt.texts.text);
 
             switch (newOpt.mode) {
               case 'delete':
@@ -2072,7 +2095,7 @@
 
             modalBody.append(dialog.templateForm);
           }
-        }).setType(BootstrapDialog.TYPE_DEFAULT);
+        });
       }
 
       checkDataValidation(data) {
