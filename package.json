@@ -1,6 +1,6 @@
 {
     "name": "orgtreeselect",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "This is a tree select plugin.",
     "main": "dist/index.umd.js",
     "scripts": {
