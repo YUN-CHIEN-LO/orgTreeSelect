@@ -46,6 +46,13 @@
             transform: scale(0.8);
         }
     }
+    & .node-checked.node-selected {
+        & .edit-icon,
+        & .delete-icon,
+        & .add-icon {
+            color: white;
+        }
+    }
     & .tagBoxs {
         max-height: 200px;
         overflow-y: scroll;

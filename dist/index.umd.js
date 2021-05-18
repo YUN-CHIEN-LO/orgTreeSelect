@@ -61,6 +61,7 @@
       showEdit: false,
       showDelete: false,
       showCheckbox: true,
+      selectedBackColor: "#0095D8",
       onAdd: null,
       onEdit: null,
       onDelete: null // cdnUrl: ["https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js", "https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"]
@@ -1916,6 +1917,16 @@
             error_invalid: "Please use an unique Id.",
             error_null: "Please fill in."
           },
+          valid: {
+            rules: {
+              nid_edit: "required",
+              text_edit: "required"
+            },
+            messages: {
+              nid_edit: "",
+              text_edit: ""
+            }
+          },
           // 儲存按鈕的callback
           onSave: null
         };
@@ -1939,16 +1950,9 @@
               if (jQuery.isFunction(newOpt.onSave)) {
                 // set form validation
                 let form = "form[name='nform-edit']";
-                $(form).validate({
-                  rules: {
-                    nid_edit: "required",
-                    text_edit: "required"
-                  },
-                  messages: {
-                    nid_edit: newOpt.texts.error_null,
-                    text_edit: newOpt.texts.error_null
-                  }
-                }); // set form submit actions
+                if (newOpt.valid.messages.nid_edit == "") newOpt.valid.messages.nid_edit = newOpt.texts.error_null;
+                if (newOpt.valid.messages.text_edit == "") newOpt.valid.messages.text_edit = newOpt.texts.error_null;
+                $(form).validate(newOpt.valid); // set form submit actions
 
                 $("#nform-edit").submit(event => {
                   event.preventDefault(); // if form is valid
@@ -2202,6 +2206,7 @@
           showEdit: options.showEdit,
           // 開啟刪除
           showDelete: options.showDelete,
+          selectedBackColor: options.selectedBackColor,
           // 當node被選取
           onNodeSelected: function (event, data) {
             // 若select，則展開

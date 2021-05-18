@@ -392,8 +392,8 @@ class OrgTreeSelect {
                     text_edit: "required"
                 },
                 messages: {
-                    nid_edit: newOpt.texts.error_null,
-                    text_edit: newOpt.texts.error_null
+                    nid_edit: "",
+                    text_edit: ""
                 }
             },
             // 儲存按鈕的callback
@@ -419,6 +419,10 @@ class OrgTreeSelect {
                     if (jQuery.isFunction(newOpt.onSave)) {
                         // set form validation
                         let form = "form[name='nform-edit']";
+
+                        if (newOpt.valid.messages.nid_edit == "") newOpt.valid.messages.nid_edit = newOpt.texts.error_null;
+                        if (newOpt.valid.messages.text_edit == "") newOpt.valid.messages.text_edit = newOpt.texts.error_null;
+
                         $(form).validate(newOpt.valid); // set form submit actions
 
                         $("#nform-edit").submit(event => {
@@ -678,6 +682,8 @@ class OrgTreeSelect {
             showEdit: options.showEdit,
             // 開啟刪除
             showDelete: options.showDelete,
+
+            selectedBackColor: options.selectedBackColor,
 
 
             // 當node被選取
