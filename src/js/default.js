@@ -8,7 +8,7 @@ export default {
     showEdit: false,
     showDelete: false,
     showCheckbox: true,
-    selectedBackColor: "#0095D8",
+    selectedBackColor: "#2796DB",
     onAdd: null,
     onEdit: null,
     onDelete: null,

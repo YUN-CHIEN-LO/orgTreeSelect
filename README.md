@@ -184,6 +184,12 @@ myTree.setOptions({
 - Default: `True`
 - note: 是否顯示 [Ckeck box icon]
 
+### selectedBackColor
+
+- Type: `String`
+- Default: `"#2796DB"`
+- note: selected node的背景顏色
+
 ### onAdd
 
 - Type: `Function`
