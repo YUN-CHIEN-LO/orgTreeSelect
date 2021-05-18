@@ -9,7 +9,7 @@ const pathResolve = p => path.resolve(__dirname, p);
 const name = 'index';
 
 module.exports = {
-    input: 'src/index.js',
+    input: 'src/js/index.js',
     output: [{
         file: `dist/${name}.umd.js`,
         format: 'umd',
