@@ -405,7 +405,6 @@ class OrgTreeSelect {
             buttons: [{
                 id: 'close',
                 label: newOpt.texts.close,
-                cssClass: 'btn-light',
                 action: function(dialog) {
                     dialog.close();
                 }
@@ -519,7 +518,6 @@ class OrgTreeSelect {
             buttons: [{
                 id: 'close',
                 label: newOpt.texts.close,
-                cssClass: 'btn-light',
                 action: function(dialog) {
                     dialog.close();
                 }
