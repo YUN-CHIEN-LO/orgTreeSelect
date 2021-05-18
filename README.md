@@ -276,7 +276,31 @@ Open Edit/Add Dialog
   {
     mode: ['edit' | 'add'],
     title: {String},
-    node: {Object},
+    node: {
+      id: {String},
+      text: {String},
+      nodes: {Array}
+    },
+    texts: {
+      id: {String},
+      text: {String},
+      save: {String},
+      close: {String},
+      error_invalid: {String},
+      error_null: {String}
+    }
+    valid: {
+      rules: {
+        [name]: {String},
+        // nid_edit: "required",
+        // text_edit: "required"
+      },
+      messages: {
+        [name]: {String},
+        // nid_edit: newOpt.texts.error_null,
+        // text_edit: newOpt.texts.error_null
+      }
+    }
     onSave: {function}
   }
   ```
@@ -294,24 +318,35 @@ Open Delete Dialog
   {
     mode: ['delete'],
     title: {String},
-    node: {Object},
+    node: {
+      id: {String},
+      text: {String},
+      nodes: {Array}
+    },
+    texts: {
+      id: {String},
+      text: {String},
+      delete: {String},
+      close: {String}
+    }
     onSave: {function}
   }
   ```
 
 ### updateNode(node)
 
-Update Node
+Update Node / 編輯此node
 
 - **node**
   - Type: `Object`
+  - note: 傳入編輯後的新資料，並依照固定的node id 去找到舊的node進行更新
 - **return**
   - Type: `Boolean`
   - note: whether this update is successful or not
 
 ### addNode(parent, newNode)
 
-Add Node
+Add Node / 在parent node 下新增 new Node
 
 - **parent**
   - Type: `Object`
@@ -325,7 +360,7 @@ Add Node
 
 ### deleteNode(node)
 
-Delete Node
+Delete Node / 刪除此node
 
 - **node**
   - Type: `Object`
@@ -337,12 +372,12 @@ Delete Node
 
 - ### Chrome (latest)
 
-- ### ~~Firefox (latest)~~
+- ### Firefox (latest)
 
-- ### ~~Safari (latest)~~
+- ### ? ~~Safari (latest)~~
 
-- ### ~~Opera (latest)~~
+- ### ? ~~Opera (latest)~~
 
-- ### ~~Edge (latest)~~
+- ### Edge (latest)
 
 - ### ~~Internet Explorer 11~~

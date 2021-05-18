@@ -386,6 +386,16 @@ class OrgTreeSelect {
                 error_invalid: "Please use an unique Id.",
                 error_null: "Please fill in."
             },
+            valid: {
+                rules: {
+                    nid_edit: "required",
+                    text_edit: "required"
+                },
+                messages: {
+                    nid_edit: newOpt.texts.error_null,
+                    text_edit: newOpt.texts.error_null
+                }
+            },
             // 儲存按鈕的callback
             onSave: null
         };
@@ -409,16 +419,7 @@ class OrgTreeSelect {
                     if (jQuery.isFunction(newOpt.onSave)) {
                         // set form validation
                         let form = "form[name='nform-edit']";
-                        $(form).validate({
-                            rules: {
-                                nid_edit: "required",
-                                text_edit: "required"
-                            },
-                            messages: {
-                                nid_edit: newOpt.texts.error_null,
-                                text_edit: newOpt.texts.error_null
-                            }
-                        }); // set form submit actions
+                        $(form).validate(newOpt.valid); // set form submit actions
 
                         $("#nform-edit").submit(event => {
                             event.preventDefault(); // if form is valid
